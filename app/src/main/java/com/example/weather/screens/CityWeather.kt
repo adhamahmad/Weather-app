@@ -220,7 +220,7 @@ fun CityWeather2(secondScreenData: List<RowData>) {
 }
 
 @Composable
-fun CityWeather1(firstScreenData: List<RowData>) {
+fun CityWeather1(modifier: Modifier = Modifier,firstScreenData: List<RowData> ) {
     val cityList = listOf(
         City("Tokyo", "06", R.drawable.spark_cloud,listOf(Color(0xFF29FF96), Color(0xFF2AC9B3))),
         City("New York", "19", R.drawable.sun_wind,listOf(Color(0xFFFF7074), Color(0xFFCA03DF))),
@@ -235,7 +235,7 @@ fun CityWeather1(firstScreenData: List<RowData>) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
-            onClick = {},
+            onClick = {AnimateMenu()},
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
             modifier = Modifier
                 .align(alignment = Alignment.Start)
@@ -343,6 +343,11 @@ fun CityWeather1(firstScreenData: List<RowData>) {
 
     }
 }
+
+fun AnimateMenu() {
+    TODO("Not yet implemented")
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CityTimeItem(modifier: Modifier = Modifier) {
@@ -557,11 +562,10 @@ fun SunsetCircle(modifier: Modifier = Modifier,sunRise:String, sunSet:String){
                 val drawable = ContextCompat.getDrawable(context, drawableResource)
                 val bitmap = drawable?.toBitmap()
                 val imageBitmap: ImageBitmap = bitmap?.asImageBitmap() ?: ImageBitmap(1, 1) // Default fallback
-                    drawImage(
+                drawImage(
                         image = imageBitmap,
                         topLeft = Offset(sunX - 20.dp.toPx(), sunY - 20.dp.toPx()),
-                        alpha = 1.0f,
-                    )
+                        alpha = 1.0f,)
             }
 
             Column(
@@ -579,6 +583,8 @@ fun SunsetCircle(modifier: Modifier = Modifier,sunRise:String, sunSet:String){
         Text(sunSet)
     }
 }
+
+
 @Preview(showBackground = true)
 @Composable
 fun SunsetCirclePreview(){
@@ -591,7 +597,7 @@ fun SunsetCirclePreview(){
 @Composable
 fun CityWeather1Preview() {
     WeatherTheme {
-        CityWeather1(firstScreenData)
+        CityWeather1(firstScreenData = firstScreenData)
     }
 }
 
