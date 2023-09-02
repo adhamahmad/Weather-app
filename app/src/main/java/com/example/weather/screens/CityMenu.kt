@@ -70,9 +70,7 @@ fun MenuScreen() {
             .padding(start = 160.dp)
             .rotate(15f) // Adjust the rotation angle as needed
     ) {
-        CityWeather1(
-            firstScreenData = firstScreenData,
-        )
+        CityWeatherScreen(daysData = rowDataList)
     }
 }
 

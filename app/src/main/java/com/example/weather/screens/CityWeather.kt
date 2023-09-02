@@ -1,5 +1,6 @@
 package com.example.weather.screens
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -17,15 +18,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -66,97 +68,92 @@ val rowDataList = listOf(
 )
 
 const val temperature = "13"
+val cityList = listOf(
+    City("Tokyo", "06", R.drawable.spark_cloud, listOf(Color(0xFF29FF96), Color(0xFF2AC9B3))),
+    City("New York", "19", R.drawable.sun_wind, listOf(Color(0xFFFF7074), Color(0xFFCA03DF))),
+    City(
+        "London", "13", R.drawable.rain_cloud_sun, listOf(Color(0xFFC661FF), Color(0xFF467BFF))
+    ),
+    City("Toky", "06", R.drawable.spark_cloud, listOf(Color(0xFF29FF96), Color(0xFF2AC9B3))),
+    City("New Yok", "19", R.drawable.sun_wind, listOf(Color(0xFFFF7074), Color(0xFFCA03DF))),
+    // Add more cities here if needed
+)
 
-val splitIndex = rowDataList.size / 2
-val firstScreenData = rowDataList.subList(0, splitIndex)
-val secondScreenData = rowDataList.subList(splitIndex, rowDataList.size)
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ComposeCircularProgressBar(
-    modifier: Modifier = Modifier.size(175.dp),
-    percentage: Float,
-    fillGradient: List<Color> = listOf(Color(0xFFC661FF), Color(0xFF467BFF)),
-    backgroundColor: Color = Color.LightGray,
-    strokeWidth: Dp = 12.dp
-) {
-    Box(
-        modifier = modifier
-            .size(175.dp)
-            .padding(16.dp)
-            .wrapContentSize(Alignment.Center)
-    ) {
-
-        Canvas(
-            modifier = modifier.padding(strokeWidth / 2)
-        ) {
-            // Background Line
-            drawArc(
-                color = backgroundColor,
-                135f,
-                270f,
-                false,
-                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Butt)
-            )
-            // Gradient Fill Line
-            val fillShader = Brush.linearGradient(
-                colors = fillGradient,
-                start = Offset(center.x - size.width / 2, center.y),
-                end = Offset(center.x + size.width / 2, center.y)
-            )
-            // Fill Line
-            drawArc(
-                brush = fillShader,
-                135F,
-                270f * percentage,
-                false,
-                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
-            )
-            // Draw the text centered below the arc
-        }
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                "72%",
-                modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
-                fontSize = 30.sp,
-            )
-            Text(
-                "Humidity",
-                modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
-                fontSize = 15.sp,
-            )
-        }
-    }
-}
-
-
-@Composable
-fun CityWeather2(secondScreenData: List<RowData>) {
+fun CityWeatherScreen(modifier: Modifier = Modifier, daysData: List<RowData>) {
     Column(
         modifier = Modifier
-//            .fillMaxSize()
-            .padding(top = 0.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
+            .verticalScroll(rememberScrollState())
+            .padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 0.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val roundedCornerShape = RoundedCornerShape(
-            topStartPercent = 0,
-            topEndPercent = 0,
-            bottomStartPercent = 15,
-            bottomEndPercent = 5,
-        )
-        Card(
-            shape = roundedCornerShape,
-//            modifier = Modifier
-//                .fillMaxSize()
-        ) {
-            NextDayList(nextDays = secondScreenData)
+        IconButton(onClick = { /**/ }, modifier = Modifier.align(Alignment.Start)) {
+            Icon(
+                painter = painterResource(id = R.drawable.menu),
+                contentDescription = "",
+                modifier = Modifier.size(24.dp)
+            )
         }
-        Spacer(modifier = Modifier.height(10.dp))
+        Text("Today", Modifier.align(alignment = Alignment.Start), fontSize = 15.sp)
+        Text("London", Modifier.align(alignment = Alignment.Start), fontSize = 40.sp)
+        Text(
+            "19-02-2021",
+            Modifier.align(alignment = Alignment.Start),
+            fontSize = 15.sp,
+            color = Color.Gray
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(32.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.rain_cloud_sun),
+                contentDescription = "",
+                modifier = Modifier.size(100.dp)
+            )
+            Text("|", fontSize = 50.sp, color = Color.LightGray)
+            Column {
+                Text(text = "${temperature.padStart(2, '0')}°", fontSize = 60.sp)
+                Text("Rainy shower", color = Color.LightGray, fontSize = 15.sp)
+            }
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        // wee can enhance it using objets simulating data returned from api
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(48.dp)
+        ) {
+            // NO Extract icon & text in one Composable
+            CurrentWeatherState(iconRes = R.drawable.wind, "19km/h")
+            CurrentWeatherState(iconRes = R.drawable.simple_cloud, "75%")
+            CurrentWeatherState(iconRes = R.drawable.water_drop, "85%")
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        Text("Today", Modifier.align(alignment = Alignment.Start), fontSize = 20.sp)
+        Spacer(modifier = Modifier.height(20.dp))
+        CityTimeList(cityList)
+        Spacer(modifier = Modifier.height(20.dp))
+        Card(
+            shape = RoundedCornerShape(
+                topStartPercent = 5,
+                topEndPercent = 15,
+                bottomStartPercent = 15,
+                bottomEndPercent = 5,
+            ), modifier = Modifier.fillMaxSize()
+        ) {
+            Text(
+                "Next Days",
+                Modifier
+                    .align(alignment = Alignment.Start)
+                    .padding(8.dp),
+                fontSize = 20.sp
+            )
+            NextDayList(nextDays = daysData)
+        }
+        Spacer(modifier = Modifier.height(20.dp))
         Text("Comfort Level", Modifier.align(alignment = Alignment.Start), fontSize = 20.sp)
-
         ComposeCircularProgressBar(percentage = 0.75f)
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -203,142 +200,90 @@ fun CityWeather2(secondScreenData: List<RowData>) {
             Text("Speed ", color = Color.LightGray)
             Text("12km/h")
         }
+
     }
+
 
 }
 
 @Composable
-fun CityWeather1(modifier: Modifier = Modifier, firstScreenData: List<RowData>) {
-    val cityList = listOf(
-        City("Tokyo", "06", R.drawable.spark_cloud, listOf(Color(0xFF29FF96), Color(0xFF2AC9B3))),
-        City("New York", "19", R.drawable.sun_wind, listOf(Color(0xFFFF7074), Color(0xFFCA03DF))),
-        City(
-            "London", "13", R.drawable.rain_cloud_sun, listOf(Color(0xFFC661FF), Color(0xFF467BFF))
-        ),
-        City("Toky", "06", R.drawable.spark_cloud, listOf(Color(0xFF29FF96), Color(0xFF2AC9B3))),
-        City("New Yok", "19", R.drawable.sun_wind, listOf(Color(0xFFFF7074), Color(0xFFCA03DF))),
-        // Add more cities here if needed
-    )
-    Column(
-        modifier = Modifier
-//            .fillMaxSize()
-            .padding(top = 16.dp, start = 16.dp, end = 16.dp, bottom = 0.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Button(
-            onClick = { AnimateMenu() },
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
+private fun CurrentWeatherState(@DrawableRes iconRes: Int, desc: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
             modifier = Modifier
-                .align(alignment = Alignment.Start)
-                .padding(0.dp)
-        ) {
-            Image( //TODO align it better
-                painter = painterResource(id = R.drawable.menu),
-                contentDescription = "",
-                modifier = Modifier.size(24.dp)
-            )
-        }
-        Spacer(modifier = Modifier.height(10.dp))
-        Text("Today", Modifier.align(alignment = Alignment.Start), fontSize = 15.sp)
-        Text("London", Modifier.align(alignment = Alignment.Start), fontSize = 40.sp)
-        Text(
-            "19-02-2021",
-            Modifier.align(alignment = Alignment.Start),
-            fontSize = 15.sp,
-            color = Color.Gray
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(32.dp)
+                .size(50.dp)
+                .background(Color.LightGray, RoundedCornerShape(16.dp))
+                .padding(12.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.rain_cloud_sun),
+                painter = painterResource(id = iconRes),
                 contentDescription = "",
-                modifier = Modifier.size(100.dp)
+                modifier = Modifier.fillMaxSize()
             )
-            Text("|", fontSize = 50.sp, color = Color.LightGray)
-            Column() {
-                Text(text = "${temperature.padStart(2, '0')}°", fontSize = 60.sp)
-                Text("Rainy shower", color = Color.LightGray, fontSize = 15.sp)
-            }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(48.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .background(Color.LightGray, RoundedCornerShape(16.dp))
-                    .padding(12.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.wind),
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .background(Color.LightGray, RoundedCornerShape(16.dp))
-                    .padding(12.dp)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.simple_cloud),
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
-            Box(
-                modifier = Modifier
-                    .size(50.dp)
-                    .background(Color.LightGray, RoundedCornerShape(16.dp))
-                    .padding(12.dp)
-
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.water_drop),
-                    contentDescription = "",
-                    modifier = Modifier.fillMaxSize()
-                )
-            }
         }
         Spacer(modifier = Modifier.height(10.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(67.dp)) {
-            Text("19km/h", fontSize = 12.sp)
-            Text("75%", fontSize = 12.sp)
-            Text("85%", fontSize = 12.sp)
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Text("Today", Modifier.align(alignment = Alignment.Start), fontSize = 20.sp)
-        Spacer(modifier = Modifier.height(20.dp))
-        CityTimeList(cityList)
-        Spacer(modifier = Modifier.height(20.dp))
-        val roundedCornerShape = RoundedCornerShape(
-            topStartPercent = 5,
-            topEndPercent = 15,
-            bottomStartPercent = 0,
-            bottomEndPercent = 0,
-        )
-        Card(
-            shape = roundedCornerShape, modifier = Modifier.fillMaxSize()
-        ) {
-            Text(
-                "Next Days",
-                Modifier
-                    .align(alignment = Alignment.Start)
-                    .padding(8.dp),
-                fontSize = 20.sp
-            )
-//            Spacer(modifier = Modifier.height(10.dp))
-            NextDayList(nextDays = firstScreenData)
-        }
-
+        Text(desc, fontSize = 12.sp)
     }
 }
+
+@Composable
+fun ComposeCircularProgressBar(
+    percentage: Float,
+    modifier: Modifier = Modifier,
+    fillGradient: List<Color> = listOf(Color(0xFFC661FF), Color(0xFF467BFF)),
+    backgroundColor: Color = Color.LightGray,
+    strokeWidth: Dp = 12.dp,
+) {
+    Box(
+        modifier = modifier
+            .size(175.dp)
+            .padding(16.dp)
+            .wrapContentSize(Alignment.Center)
+    ) {
+        Canvas(modifier = Modifier.padding(strokeWidth / 2)) {
+            // Background Line
+            drawArc(
+                color = backgroundColor,
+                135f,
+                270f,
+                false,
+                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Butt)
+            )
+            // Gradient Fill Line
+            val fillShader = Brush.linearGradient(
+                colors = fillGradient,
+                start = Offset(center.x - size.width / 2, center.y),
+                end = Offset(center.x + size.width / 2, center.y)
+            )
+            // Fill Line
+            drawArc(
+                brush = fillShader,
+                135F,
+                270f * percentage,
+                false,
+                style = Stroke(strokeWidth.toPx(), cap = StrokeCap.Round)
+            )
+            // Draw the text centered below the arc
+        }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                "72%",
+                modifier = Modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
+                fontSize = 30.sp,
+            )
+            Text(
+                "Humidity",
+                modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+                fontSize = 15.sp,
+            )
+        }
+    }
+}
+
 
 fun AnimateMenu() {
     TODO("Not yet implemented")
@@ -437,14 +382,11 @@ fun NextDayItem(nextDay: RowData, modifier: Modifier = Modifier) {
 
 @Composable
 private fun NextDayList(nextDays: List<RowData>, modifier: Modifier = Modifier) {
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(4.dp),
+    Column(
+        modifier = modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         verticalArrangement = Arrangement.spacedBy(0.dp),
     ) {
-        items(items = nextDays, key = { nextDay ->
-            nextDay.date
-        }) { nextDay ->
+        nextDays.forEach { nextDay ->
             NextDayItem(nextDay)
         }
     }
@@ -607,20 +549,11 @@ fun SunsetCirclePreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun CityWeather1Preview() {
+fun CityWeatherScreenPreview() {
     WeatherTheme {
-        CityWeather1(firstScreenData = firstScreenData)
+        CityWeatherScreen(daysData = rowDataList)
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun CityWeather2Preview() {
-    WeatherTheme {
-        CityWeather2(secondScreenData)
-    }
-}
-
 
 @Preview(showBackground = true)
 @Composable
