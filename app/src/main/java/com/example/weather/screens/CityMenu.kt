@@ -23,6 +23,12 @@ import com.example.weather.ui.theme.WeatherTheme
 
 @Composable
 fun MenuScreen() {
+    // should use (Navigation Drawer) ModalNavigationDrawer
+    // https://m3.material.io/components/navigation-drawer/overview
+    // implement normal navigation drawer && you can skip animation
+    // try to sync how to write code can be use navigation component systeem
+    // https://developer.android.com/reference/kotlin/androidx/compose/material3/package-summary#ModalNavigationDrawer(kotlin.Function0,androidx.compose.ui.Modifier,androidx.compose.material3.DrawerState,kotlin.Boolean,androidx.compose.ui.graphics.Color,kotlin.Function0)
+    // also you can use see: https://fvilarino.medium.com/animated-drawer-in-jetpack-compose-5e39f659f9c , https://proandroiddev.com/navigation-with-animated-transitions-using-jetpack-compose-daeb00d4fb45
     Column(
         verticalArrangement = Arrangement.spacedBy(30.dp),
         modifier = Modifier
