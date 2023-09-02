@@ -55,12 +55,23 @@ import com.example.weather.ui.theme.WeatherTheme
 
 @Composable
 fun CitiesScreen(modifier: Modifier = Modifier) {
-    val cityList = listOf(
-        City("Tokyo", "06", R.drawable.spark_cloud,listOf(Color(0xFF29FF96), Color(0xFF2AC9B3))),
-        City("New York", "19", R.drawable.sun_wind,listOf(Color(0xFFFF7074), Color(0xFFCA03DF))),
-        City("London", "13", R.drawable.rain_cloud_sun,listOf(Color(0xFFC661FF), Color(0xFF467BFF)))
-        // Add more cities here if needed
-    )
+    // Wrong you shouldn't create instance inside composable fun
+    // instead should use remember or use const val outside composable
+    val cityList = remember {
+        listOf(
+            City(
+                "Tokyo", "06", R.drawable.spark_cloud, listOf(Color(0xFF29FF96), Color(0xFF2AC9B3))
+            ), City(
+                "New York", "19", R.drawable.sun_wind, listOf(Color(0xFFFF7074), Color(0xFFCA03DF))
+            ), City(
+                "London",
+                "13",
+                R.drawable.rain_cloud_sun,
+                listOf(Color(0xFFC661FF), Color(0xFF467BFF))
+            )
+            // Add more cities here if needed
+        )
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -107,9 +118,24 @@ fun SearchBar(
         })
 }
 
+// Use with MaterialTheme.shapes.card
+val Shapes.card: Shape
+    get() = RoundedCornerShape(
+        topStartPercent = 15,
+        topEndPercent = 45,
+        bottomStartPercent = 45,
+        bottomEndPercent = 15,
+    )
+
 @Composable
 fun CityListItem(city: City, modifier: Modifier = Modifier) {
+    // modifier not used
     val gradientColors = city.gradientColors
+    // here we have more than one option
+    // you can extract it as variable outside composable
+    // https://developer.android.com/jetpack/compose/designsystems/material#shape
+    // https://developer.android.com/jetpack/compose/designsystems/custom#extending-material
+
     val roundedCornerShape = RoundedCornerShape(
         topStartPercent = 15,
         topEndPercent = 45,
@@ -118,8 +144,8 @@ fun CityListItem(city: City, modifier: Modifier = Modifier) {
     )
     Card(
         elevation = CardDefaults.cardElevation(),
-        shape = roundedCornerShape,
-
+        shape = MaterialTheme.shapes.card,
+        modifier = modifier,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -172,10 +198,13 @@ fun CityListButton(modifier: Modifier = Modifier) {
         bottomStartPercent = 45,
         bottomEndPercent = 15,
     )
-    Card(
+
+    // you can use Button here
+    // https://developer.android.com/jetpack/compose/designsystems/material#component-states
+    /*Card(
         shape = roundedCornerShape,
-        border = BorderStroke(1.dp,Color.Gray),
-        ) {
+        border = BorderStroke(1.dp, Color.Gray),
+    ) {
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -191,12 +220,11 @@ fun CityListButton(modifier: Modifier = Modifier) {
 
             FloatingActionButton(
                 containerColor = Color.LightGray,
-                modifier = Modifier
-                    .size(40.dp),
+                modifier = Modifier.size(40.dp),
                 shape = CircleShape,
                 onClick = {},
 
-            ) {
+                ) {
                 Icon(
                     imageVector = Icons.Outlined.Add,
                     contentDescription = "Custom FAB Image",
@@ -205,9 +233,31 @@ fun CityListButton(modifier: Modifier = Modifier) {
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = "Add city")
         }
-
+    }*/
+    Button(
+        onClick = { /* ... */ },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.White, contentColor = Color.DarkGray
+        ),
+        border = BorderStroke(1.dp, Color.Gray),
+        contentPadding = PaddingValues(30.dp),
+        shape = MaterialTheme.shapes.card,
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .background(Color.LightGray, CircleShape)
+                .size(40.dp)
+                .clip(CircleShape), contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.Add,
+                contentDescription = "Custom FAB Image",
+            )
+        }
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(text = "Add city")
     }
-
 }
 
 @Preview(showBackground = true)
