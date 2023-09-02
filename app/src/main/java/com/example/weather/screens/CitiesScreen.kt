@@ -19,35 +19,30 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material3.AlertDialogDefaults.containerColor
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterEnd
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -72,11 +67,11 @@ fun CitiesScreen(modifier: Modifier = Modifier) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Find Location", textAlign = TextAlign.Left,modifier=Modifier.fillMaxWidth())
+        Text(text = "Find Location", textAlign = TextAlign.Left, modifier = Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.height(20.dp))
         SearchBar()
         Spacer(modifier = Modifier.height(40.dp))
-        Text(text = "Cities", textAlign = TextAlign.Left,modifier=Modifier.fillMaxWidth())
+        Text(text = "Cities", textAlign = TextAlign.Left, modifier = Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.height(20.dp))
         CityList(cities = cityList, modifier = Modifier.fillMaxWidth())
         Spacer(modifier = Modifier.height(35.dp))
@@ -91,8 +86,7 @@ fun CitiesScreen(modifier: Modifier = Modifier) {
 fun SearchBar(
     modifier: Modifier = Modifier
 ) {
-    OutlinedTextField(
-        value = "",
+    OutlinedTextField(value = "",
         placeholder = { Text("Search for your location", color = Color.Gray) },
         onValueChange = {},
         textStyle = TextStyle(color = Color.Black),
@@ -108,12 +102,9 @@ fun SearchBar(
             .fillMaxWidth(),
         trailingIcon = {
             Icon(
-                imageVector = Icons.Default.Search,
-                tint = Color.Gray,
-                contentDescription = null
+                imageVector = Icons.Default.Search, tint = Color.Gray, contentDescription = null
             )
-        }
-    )
+        })
 }
 
 @Composable
@@ -132,19 +123,13 @@ fun CityListItem(city: City, modifier: Modifier = Modifier) {
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-
             modifier = Modifier
-                .background(
-                    brush = Brush.verticalGradient(gradientColors)
-                )
+                .background(brush = Brush.verticalGradient(gradientColors))
                 .fillMaxWidth()
                 .padding(20.dp)
-
-                 // Aligns the content at the start of the card
+            // Aligns the content at the start of the card
         ) {
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = "${city.temp.padStart(2, '0')}°",
                     color = Color.White,
@@ -159,14 +144,11 @@ fun CityListItem(city: City, modifier: Modifier = Modifier) {
             Image(
                 painter = painterResource(city.imgSrc),
                 contentDescription = city.name,
-                modifier = Modifier
-                    .size(90.dp) // Adjust the image size as needed
-                    // Aligns the image at the end of the row
+                modifier = Modifier.size(90.dp) // Adjust the image size as needed
+                // Aligns the image at the end of the row
             )
         }
-
     }
-
 }
 
 @Composable
@@ -175,14 +157,9 @@ private fun CityList(cities: List<City>, modifier: Modifier = Modifier) {
         modifier = modifier,
         contentPadding = PaddingValues(8.dp),
         verticalArrangement = Arrangement.spacedBy(35.dp),
-    ){
-        items(
-            items = cities,
-            key = { city ->
-                city.name
-            }
-        ){city ->
-            CityListItem(city = city,)
+    ) {
+        items(items = cities, key = { city -> city.name }) { city ->
+            CityListItem(city = city)
         }
     }
 }
@@ -235,7 +212,7 @@ fun CityListButton(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun CitiesScreenPreview(){
+fun CitiesScreenPreview() {
     WeatherTheme {
         CitiesScreen()
     }
@@ -243,15 +220,19 @@ fun CitiesScreenPreview(){
 
 @Preview(showBackground = true)
 @Composable
-fun CitiesItemPreview(){
+fun CitiesItemPreview() {
     WeatherTheme {
-        CityListItem(city = City("Tokyo","06",R.drawable.spark_cloud,listOf(Color(0xFF29FF96), Color(0xFF2AC9B3))))
+        CityListItem(
+            city = City(
+                "Tokyo", "06", R.drawable.spark_cloud, listOf(Color(0xFF29FF96), Color(0xFF2AC9B3))
+            )
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun CityListButtonPreview(){
+fun CityListButtonPreview() {
     WeatherTheme {
         CityListButton()
     }

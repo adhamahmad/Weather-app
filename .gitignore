@@ -1,2 +1,8 @@
 # Project exclude paths
 /.gradle/
+.idea/.name
+.idea/gradle.xml
+.idea/misc.xml
+.idea/modules/app/weather.app.iml
+.idea/workspace.xml
+local.properties
