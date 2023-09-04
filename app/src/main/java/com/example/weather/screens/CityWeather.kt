@@ -28,7 +28,9 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +46,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -81,129 +84,130 @@ val cityList = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CityWeatherScreen(modifier: Modifier = Modifier, daysData: List<RowData>) {
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 0.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        IconButton(onClick = { /**/ }, modifier = Modifier.align(Alignment.Start)) {
-            Icon(
-                painter = painterResource(id = R.drawable.menu),
-                contentDescription = "",
-                modifier = Modifier.size(24.dp)
-            )
-        }
-        Text("Today", Modifier.align(alignment = Alignment.Start), fontSize = 15.sp)
-        Text("London", Modifier.align(alignment = Alignment.Start), fontSize = 40.sp)
-        Text(
-            "19-02-2021",
-            Modifier.align(alignment = Alignment.Start),
-            fontSize = 15.sp,
-            color = Color.Gray
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(32.dp)
+fun CityWeatherScreen(modifier: Modifier = Modifier, daysData: List<RowData>,tilt: Float = 0f) {
+//    Scaffold(
+//        topBar = { MenuScreen() }
+//
+//    ){
+//
+//    }
+        Column(
+            modifier = modifier
+                .verticalScroll(rememberScrollState())
+                .padding(top = 32.dp, start = 16.dp, end = 16.dp, bottom = 0.dp)
+                .graphicsLayer(rotationZ = tilt),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.rain_cloud_sun),
-                contentDescription = "",
-                modifier = Modifier.size(100.dp)
-            )
-            Text("|", fontSize = 50.sp, color = Color.LightGray)
-            Column {
-                Text(text = "${temperature.padStart(2, '0')}°", fontSize = 60.sp)
-                Text("Rainy shower", color = Color.LightGray, fontSize = 15.sp)
-            }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        // wee can enhance it using objets simulating data returned from api
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(48.dp)
-        ) {
-            // NO Extract icon & text in one Composable
-            CurrentWeatherState(iconRes = R.drawable.wind, "19km/h")
-            CurrentWeatherState(iconRes = R.drawable.simple_cloud, "75%")
-            CurrentWeatherState(iconRes = R.drawable.water_drop, "85%")
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Text("Today", Modifier.align(alignment = Alignment.Start), fontSize = 20.sp)
-        Spacer(modifier = Modifier.height(20.dp))
-        CityTimeList(cityList)
-        Spacer(modifier = Modifier.height(20.dp))
-        Card(
-            shape = RoundedCornerShape(
-                topStartPercent = 5,
-                topEndPercent = 15,
-                bottomStartPercent = 15,
-                bottomEndPercent = 5,
-            ), modifier = Modifier.fillMaxSize()
-        ) {
+            Text("Today", Modifier.align(alignment = Alignment.Start), fontSize = 15.sp)
+            Text("London", Modifier.align(alignment = Alignment.Start), fontSize = 40.sp)
             Text(
-                "Next Days",
-                Modifier
-                    .align(alignment = Alignment.Start)
-                    .padding(8.dp),
+                "19-02-2021",
+                Modifier.align(alignment = Alignment.Start),
+                fontSize = 15.sp,
+                color = Color.Gray
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(32.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.rain_cloud_sun),
+                    contentDescription = "",
+                    modifier = Modifier.size(100.dp)
+                )
+                Text("|", fontSize = 50.sp, color = Color.LightGray)
+                Column {
+                    Text(text = "${temperature.padStart(2, '0')}°", fontSize = 60.sp)
+                    Text("Rainy shower", color = Color.LightGray, fontSize = 15.sp)
+                }
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            // wee can enhance it using objets simulating data returned from api
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(48.dp)
+            ) {
+                // NO Extract icon & text in one Composable
+                CurrentWeatherState(iconRes = R.drawable.wind, "19km/h")
+                CurrentWeatherState(iconRes = R.drawable.simple_cloud, "75%")
+                CurrentWeatherState(iconRes = R.drawable.water_drop, "85%")
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Text("Today", Modifier.align(alignment = Alignment.Start), fontSize = 20.sp)
+            Spacer(modifier = Modifier.height(20.dp))
+            CityTimeList(cityList)
+            Spacer(modifier = Modifier.height(20.dp))
+            Card(
+                shape = RoundedCornerShape(
+                    topStartPercent = 5,
+                    topEndPercent = 15,
+                    bottomStartPercent = 15,
+                    bottomEndPercent = 5,
+                ), modifier = Modifier.fillMaxSize()
+            ) {
+                Text(
+                    "Next Days",
+                    Modifier
+                        .align(alignment = Alignment.Start)
+                        .padding(8.dp),
+                    fontSize = 20.sp
+                )
+                NextDayList(nextDays = daysData)
+            }
+            Spacer(modifier = Modifier.height(20.dp))
+            Text("Comfort Level", Modifier.align(alignment = Alignment.Start), fontSize = 20.sp)
+            ComposeCircularProgressBar(percentage = 0.75f)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+//            horizontalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                Text("Feels like ", color = Color.LightGray)
+                Text("10°")
+                Spacer(modifier = Modifier.width(48.dp))
+                Text("|", fontSize = 30.sp, color = Color.LightGray)
+                Spacer(modifier = Modifier.width(48.dp))
+                Text("UV index ", color = Color.LightGray)
+                Text("0 low")
+            }
+            Spacer(modifier = Modifier.height(5.dp))
+            Divider(
+                color = Color.LightGray, thickness = 1.dp, modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                "Sunrise and Sunset",
+                Modifier.align(alignment = Alignment.Start),
                 fontSize = 20.sp
             )
-            NextDayList(nextDays = daysData)
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Text("Comfort Level", Modifier.align(alignment = Alignment.Start), fontSize = 20.sp)
-        ComposeCircularProgressBar(percentage = 0.75f)
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
+            Spacer(modifier = Modifier.height(5.dp))
+            SunsetCircle(sunRise = "06:10", sunSet = "18:45")
+
+            Divider(
+                color = Color.LightGray, thickness = 1.dp, modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text("Wind", Modifier.align(alignment = Alignment.Start), fontSize = 20.sp)
+
+            Image(
+                painter = painterResource(id = R.drawable.turbine),
+                contentDescription = "",
+                modifier = Modifier.size(50.dp)
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
 //            horizontalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            Text("Feels like ", color = Color.LightGray)
-            Text("10°")
-            Spacer(modifier = Modifier.width(48.dp))
-            Text("|", fontSize = 30.sp, color = Color.LightGray)
-            Spacer(modifier = Modifier.width(48.dp))
-            Text("UV index ", color = Color.LightGray)
-            Text("0 low")
+            ) {
+                Text("Direction ", color = Color.LightGray)
+                Text("North")
+                Spacer(modifier = Modifier.width(48.dp))
+                Text("|", fontSize = 30.sp, color = Color.LightGray)
+                Spacer(modifier = Modifier.width(48.dp))
+                Text("Speed ", color = Color.LightGray)
+                Text("12km/h")
+            }
         }
-        Spacer(modifier = Modifier.height(5.dp))
-        Divider(
-            color = Color.LightGray, thickness = 1.dp, modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text("Sunrise and Sunset", Modifier.align(alignment = Alignment.Start), fontSize = 20.sp)
-        Spacer(modifier = Modifier.height(5.dp))
-        SunsetCircle(sunRise = "06:10", sunSet = "18:45")
-
-        Divider(
-            color = Color.LightGray, thickness = 1.dp, modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text("Wind", Modifier.align(alignment = Alignment.Start), fontSize = 20.sp)
-
-        Image(
-            painter = painterResource(id = R.drawable.turbine),
-            contentDescription = "",
-            modifier = Modifier.size(50.dp)
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-//            horizontalArrangement = Arrangement.spacedBy(20.dp)
-        ) {
-            Text("Direction ", color = Color.LightGray)
-            Text("North")
-            Spacer(modifier = Modifier.width(48.dp))
-            Text("|", fontSize = 30.sp, color = Color.LightGray)
-            Spacer(modifier = Modifier.width(48.dp))
-            Text("Speed ", color = Color.LightGray)
-            Text("12km/h")
-        }
-
-    }
-
-
 }
 
 @Composable
