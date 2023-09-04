@@ -60,56 +60,11 @@ import kotlinx.coroutines.launch
 // try to sync how to write code can be use navigation component systeem
 // https://developer.android.com/reference/kotlin/androidx/compose/material3/package-summary#ModalNavigationDrawer(kotlin.Function0,androidx.compose.ui.Modifier,androidx.compose.material3.DrawerState,kotlin.Boolean,androidx.compose.ui.graphics.Color,kotlin.Function0)
 // also you can use see: https://fvilarino.medium.com/animated-drawer-in-jetpack-compose-5e39f659f9c , https://proandroiddev.com/navigation-with-animated-transitions-using-jetpack-compose-daeb00d4fb45
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MenuScreen(modifier: Modifier = Modifier) {
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
-// icons to mimic drawer destinations
-    val items = listOf(Icons.Default.Add,Icons.Outlined.Settings,Icons.Outlined.LocationOn)
-    val selectedItem = remember { mutableStateOf(items[0]) }
-    ModalNavigationDrawer(
-        modifier = modifier,
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet(
-                modifier = Modifier
-                    .then(
-                        if (drawerState.targetValue == DrawerValue.Open) Modifier.fillMaxSize() else Modifier
-                    )
-            ) {
-                Spacer(Modifier.height(200.dp))
-                items.forEach { item ->
-                    NavigationDrawerItem(
-                        icon = { Icon(item, contentDescription = null) },
-                        label = { Text(item.name) },
-                        selected = item == selectedItem.value,
-                        onClick = {
-                            scope.launch { drawerState.close() }
-                            selectedItem.value = item
-                        },
-                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                    )
-                }
-            }
-        },
-        content = {
-
-                IconButton(onClick = { scope.launch { drawerState.open() } },) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.menu),
-                        contentDescription = "",
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-        }
-    )
-}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MenuScreen2() {
+fun MenuScreen() {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val iconsAndLabels = listOf(
@@ -187,6 +142,6 @@ fun MenuScreen2() {
 @Composable
 fun MenuScreenPreview() {
     WeatherTheme {
-        MenuScreen2()
+        MenuScreen()
     }
 }
